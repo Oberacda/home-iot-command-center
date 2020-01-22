@@ -72,7 +72,7 @@ public:
 class HOME_IOT_CTL_API Home {
 private:
     std::unique_ptr<mqtt::async_client> mqtt_client;
-    HomeMqttCallbacks callbacks;
+    //HomeMqttCallbacks callbacks;
 
 public:
     void send_command(DeviceChange& change);

@@ -43,12 +43,13 @@ target_link_libraries(home_iot_ctl_center_EXE
 
 set_target_properties(home_iot_ctl_center_EXE
         PROPERTIES
-        OUTPUT_NAME     "HomeIotCtlCenter"
-        LANGUAGES       CXX
-        VERSION         "${CMAKE_PROJECT_VERSION}"
-        AUTOMOC         ON
-        AUTOUIC         ON
-        AUTORCC         ON
+        OUTPUT_NAME                 "HomeIotCtlCenter"
+        LANGUAGES                   CXX
+        VERSION                     "${CMAKE_PROJECT_VERSION}"
+        RUNTIME_OUTPUT_DIRECTORY    "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${PROJECT_NAME}"
+        AUTOMOC                     ON
+        AUTOUIC                     ON
+        AUTORCC                     ON
         )
 
 get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)

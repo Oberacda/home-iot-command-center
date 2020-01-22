@@ -2,8 +2,6 @@
 // Created by David Oberacker on 20.01.20.
 //
 
-#include <tic.h>
-
 #include "iot/home.hpp"
 
 void HomeMqttCallbacks::connected(const std::string &string) {

@@ -38,7 +38,6 @@ target_include_directories(home_iot_ctl_LIB
 
 target_compile_options(home_iot_ctl_LIB
         PRIVATE -DHOME_IOT_CTL__LIB_EXPORTS=1
-        PUBLIC  -fPIC
         )
 
 target_link_libraries(home_iot_ctl_LIB
