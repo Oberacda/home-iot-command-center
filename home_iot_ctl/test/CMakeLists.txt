@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 set(home_iot_ctl_LIB_TEST_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/test_home.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/test_device.cpp
         )
 
 add_executable(home_iot_ctl_LIB_TEST

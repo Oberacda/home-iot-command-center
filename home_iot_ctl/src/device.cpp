@@ -1,29 +1,25 @@
-//
-// Created by David Oberacker on 20.01.20.
-//
+/*!
+ * @file device.cpp
+ * @brief Source file for classes related to devices in the IoT network.
+ *
+ * @author David Oberacker <david.oberacker(at)gmail.com>
+ * @version 1.0.0
+ * @date 20.01.20
+ */
 
 #include "iot/device.hpp"
 
 #include <utility>
 
-uint64_t Device::getDeviceId() const {
-    return device_id;
-}
-
 const std::string &Device::getDeviceName() const {
     return device_name;
-}
-
-const std::vector<std::string> &Device::getDeviceSensors() const {
-    return device_sensors;
 }
 
 bool Device::isAvailable() const {
     return is_available;
 }
 
-Device::Device(uint64_t deviceId, std::string deviceName, std::vector<std::string> deviceSensors,
-               bool isAvailable) : device_id(deviceId), device_name(std::move(deviceName)), device_sensors(std::move(deviceSensors)),
+Device::Device(std::string deviceName, bool isAvailable) : device_name(std::move(deviceName)),
                                    is_available(isAvailable) {}
 
 Device::~Device() {
@@ -31,7 +27,7 @@ Device::~Device() {
 }
 
 bool Device::operator==(const Device &rhs) const {
-    return device_id == rhs.device_id;
+    return device_name == rhs.device_name;
 }
 
 bool Device::operator!=(const Device &rhs) const {
@@ -39,6 +35,30 @@ bool Device::operator!=(const Device &rhs) const {
 }
 
 std::ostream &operator<<(std::ostream &os, const Device &device) {
-    os << "device_id: " << device.device_id << " device_name: " << device.device_name << " is_available: " << device.is_available;
+    os << " device_name: " << device.device_name << " is_available: " << device.is_available;
     return os;
+}
+
+void Device::setIsAvailable(bool isAvailable) {
+    is_available = isAvailable;
+}
+
+const std::vector<std::string> &SensorDevice::getDeviceSensors() const {
+    return device_sensors;
+}
+
+SensorDevice::SensorDevice(const std::string &deviceName, bool isAvailable) : Device(deviceName, isAvailable) {}
+
+void SensorDevice::addSensor(const std::string& sensor_name) {
+    if (sensor_name.length() < 1) {
+        throw std::invalid_argument("The given sensor_name is too short!");
+    }
+
+    this->device_sensors.push_back(sensor_name);
+}
+
+void SensorDevice::addSensors(const std::vector<std::string>& sensors) {
+    for (const std::string& sensor_name : sensors) {
+        this->addSensor(sensor_name);
+    }
 }
