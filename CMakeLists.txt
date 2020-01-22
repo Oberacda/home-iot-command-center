@@ -12,6 +12,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include(GenerateExportHeader)
 
+enable_testing()
+
 add_subdirectory(home_iot_ctl)
 add_subdirectory(home_iot_ctl_center)
 
