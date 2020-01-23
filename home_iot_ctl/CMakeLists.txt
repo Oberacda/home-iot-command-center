@@ -41,9 +41,13 @@ endif (DOXYGEN_FOUND AND home_iot_ctl_BUILD_DOC)
 
 set(home_iot_ctl_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_subdirectory(src)
-
 option(home_iot_ctl_LIB_TESTING_ENABLED "Enabled testing of the project!" ON)
+option(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED "Enabled test coverage of the project!" ON)
+if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND NOT home_iot_ctl_LIB_TESTING_ENABLED)
+    message(ERROR "Coverage can only be enabled when testing is enabled!")
+endif(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND NOT home_iot_ctl_LIB_TESTING_ENABLED)
+
+add_subdirectory(src)
 
 if (GTEST_FOUND AND home_iot_ctl_LIB_TESTING_ENABLED)
     enable_testing()

@@ -47,6 +47,7 @@ TEST_F(DeviceTest, ConstructorValid) {
     ASSERT_EQ(this->device_hallo_true_ptr->isAvailable(), true);
 }
 
+
 TEST_F(DeviceTest, EqualityName) {
     ASSERT_EQ(this->device_hallo_false_ptr->getDeviceName(), "Hallo");
     ASSERT_EQ(this->device_hallo_true_ptr->getDeviceName(), "Hallo");
@@ -62,12 +63,40 @@ TEST_F(DeviceTest, EqualityName) {
     ASSERT_TRUE(*(device_hello1_ptr) == *(device_hello1_ptr));
 }
 
+TEST_F(DeviceTest, ToString) {
+    std::unique_ptr<Device> device_hello1_ptr = std::make_unique<Device>("Hallo1", false);
+    std::cout << *device_hello1_ptr << std::endl;
+}
+
 TEST_F(DeviceTest, EqualitySubclass) {
     std::unique_ptr<SensorDevice> device_hello1_ptr = std::make_unique<SensorDevice>("Hallo1", false);
 
     ASSERT_FALSE(*(this->device_hallo_false_ptr) == *(device_hello1_ptr));
     ASSERT_FALSE(*(this->device_hallo_true_ptr) == *(device_hello1_ptr));
     ASSERT_TRUE(*(device_hello1_ptr) == *(device_hello1_ptr));
+}
+
+TEST_F(DeviceTest, UnequalityName) {
+    ASSERT_EQ(this->device_hallo_false_ptr->getDeviceName(), "Hallo");
+    ASSERT_EQ(this->device_hallo_true_ptr->getDeviceName(), "Hallo");
+
+    ASSERT_FALSE(*(this->device_hallo_false_ptr) != *(this->device_hallo_true_ptr));
+    ASSERT_FALSE(*(this->device_hallo_false_ptr) != *(this->device_hallo_false_ptr));
+    ASSERT_FALSE(*(this->device_hallo_true_ptr) != *(this->device_hallo_true_ptr));
+
+    std::unique_ptr<Device> device_hello1_ptr = std::make_unique<Device>("Hallo1", false);
+
+    ASSERT_TRUE(*(this->device_hallo_false_ptr) != *(device_hello1_ptr));
+    ASSERT_TRUE(*(this->device_hallo_true_ptr) != *(device_hello1_ptr));
+    ASSERT_FALSE(*(device_hello1_ptr) != *(device_hello1_ptr));
+}
+
+TEST_F(DeviceTest, UnequalitySubclass) {
+    std::unique_ptr<SensorDevice> device_hello1_ptr = std::make_unique<SensorDevice>("Hallo1", false);
+
+    ASSERT_TRUE(*(this->device_hallo_false_ptr) != *(device_hello1_ptr));
+    ASSERT_TRUE(*(this->device_hallo_true_ptr) != *(device_hello1_ptr));
+    ASSERT_FALSE(*(device_hello1_ptr) != *(device_hello1_ptr));
 }
 
 TEST_F(DeviceTest, AddSensor) {
@@ -89,6 +118,19 @@ TEST_F(DeviceTest, AddSensor) {
     ASSERT_TRUE(std::find(device_sensor_ptr->getDeviceSensors().begin(),
     device_sensor_ptr->getDeviceSensors().end(), 
     "Test2") != device_sensor_ptr->getDeviceSensors().end());
+}
+
+TEST_F(DeviceTest, SetAvailability) {
+    std::unique_ptr<Device> device_sensor_ptr = std::make_unique<Device>("Hallo1", false);
+    ASSERT_FALSE(device_sensor_ptr->isAvailable());
+    device_sensor_ptr->setIsAvailable(true);
+    ASSERT_TRUE(device_sensor_ptr->isAvailable());
+}
+
+TEST_F(DeviceTest, SensorNameInvalid) { 
+    std::unique_ptr<SensorDevice> device_sensor_ptr = std::make_unique<SensorDevice>("Hallo1", false);
+    ASSERT_NO_THROW(device_sensor_ptr->addSensor("Test1"));
+    ASSERT_THROW(device_sensor_ptr->addSensor(""), std::invalid_argument);
 }
 
 TEST_F(DeviceTest, AddSensors) {

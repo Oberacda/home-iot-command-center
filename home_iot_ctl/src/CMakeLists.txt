@@ -56,7 +56,7 @@ set_target_properties(home_iot_ctl_LIB
         )
 
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND CMAKE_COMPILER_IS_GNUCXX)
         target_compile_options(home_iot_ctl_LIB
                 PUBLIC -fprofile-arcs
                 PUBLIC -ftest-coverage

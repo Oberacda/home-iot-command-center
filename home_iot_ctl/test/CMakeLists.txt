@@ -18,7 +18,7 @@ target_link_libraries(home_iot_ctl_LIB_TEST
         GTest::GTest
         )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND CMAKE_COMPILER_IS_GNUCXX)
         include(CodeCoverage)
         
         target_compile_options(home_iot_ctl_LIB_TEST
@@ -47,7 +47,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
                 EXCLUDE "'/usr/**/*'"
                 )
 
-endif(CMAKE_COMPILER_IS_GNUCXX)
+endif(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND CMAKE_COMPILER_IS_GNUCXX)
 
 set_target_properties(home_iot_ctl_LIB_TEST
         PROPERTIES
