@@ -15,5 +15,10 @@ include(GenerateExportHeader)
 enable_testing()
 
 add_subdirectory(home_iot_ctl)
-add_subdirectory(home_iot_ctl_center)
+
+option(home_iot_ctl_BUILD_QT_GUI "Build Qt5 GUI for the Command Center!" ON)
+
+if (home_iot_ctl_BUILD_QT_GUI)
+        add_subdirectory(home_iot_ctl_center)
+endif(home_iot_ctl_BUILD_QT_GUI)
 
