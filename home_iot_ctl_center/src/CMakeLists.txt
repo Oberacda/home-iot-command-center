@@ -34,6 +34,7 @@ endif (WIN32)
 add_executable(home_iot_ctl_center_EXE
         ${home_iot_ctl_center_EXE_SOURCE_FILES}
         ${home_iot_ctl_center_EXE_INCLUDE_FILES}
+        ${home_iot_ctl_center_EXE_RESOURCE_FILES}
         )
 
 target_link_libraries(home_iot_ctl_center_EXE
