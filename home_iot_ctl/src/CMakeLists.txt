@@ -38,10 +38,11 @@ target_include_directories(home_iot_ctl_LIB
 
 target_compile_options(home_iot_ctl_LIB
         PRIVATE -DHOME_IOT_CTL__LIB_EXPORTS=1
+        PUBLIC  -fPIC
         )
 
 target_link_libraries(home_iot_ctl_LIB
-        PahoMqttCpp::paho-mqttpp3
+        PUBLIC PahoMqttCpp::paho-mqttpp3
         )
 
 set_target_properties(home_iot_ctl_LIB
@@ -53,3 +54,19 @@ set_target_properties(home_iot_ctl_LIB
         PRIVATE_HEADER  "${home_iot_ctl_EXE_PRIVATE_INCLUDE_FILES}"
         PUBLIC_HEADER   "${home_iot_ctl_EXE_PUBLIC_INCLUDE_FILES}"
         )
+
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+        target_compile_options(home_iot_ctl_LIB
+                PUBLIC -fprofile-arcs
+                PUBLIC -ftest-coverage
+        )
+
+        target_link_libraries(home_iot_ctl_LIB
+                PUBLIC gcov
+        )
+
+        target_link_options(home_iot_ctl_LIB
+                PUBLIC --coverage
+        )
+endif()

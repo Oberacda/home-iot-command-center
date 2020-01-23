@@ -3,6 +3,8 @@
 //
 
 #include <memory>
+#include <algorithm>
+#include <vector>
 
 #include <gtest/gtest.h>
 #include <iot/device.hpp>
@@ -68,3 +70,45 @@ TEST_F(DeviceTest, EqualitySubclass) {
     ASSERT_TRUE(*(device_hello1_ptr) == *(device_hello1_ptr));
 }
 
+TEST_F(DeviceTest, AddSensor) {
+    std::unique_ptr<SensorDevice> device_sensor_ptr = std::make_unique<SensorDevice>("Hallo1", false);
+    device_sensor_ptr->addSensor("Test1");
+    ASSERT_EQ(device_sensor_ptr->getDeviceSensors().size(), 1);
+    ASSERT_TRUE(std::find(device_sensor_ptr->getDeviceSensors().begin(),
+    device_sensor_ptr->getDeviceSensors().end(), 
+    "Test1") != device_sensor_ptr->getDeviceSensors().end());
+    ASSERT_FALSE(std::find(device_sensor_ptr->getDeviceSensors().begin(),
+    device_sensor_ptr->getDeviceSensors().end(), 
+    "Test2") != device_sensor_ptr->getDeviceSensors().end());
+
+    device_sensor_ptr->addSensor("Test2");
+    ASSERT_EQ(device_sensor_ptr->getDeviceSensors().size(), 2);
+    ASSERT_TRUE(std::find(device_sensor_ptr->getDeviceSensors().begin(),
+    device_sensor_ptr->getDeviceSensors().end(), 
+    "Test1") != device_sensor_ptr->getDeviceSensors().end());
+    ASSERT_TRUE(std::find(device_sensor_ptr->getDeviceSensors().begin(),
+    device_sensor_ptr->getDeviceSensors().end(), 
+    "Test2") != device_sensor_ptr->getDeviceSensors().end());
+}
+
+TEST_F(DeviceTest, AddSensors) {
+    std::unique_ptr<SensorDevice> device_sensor_ptr = std::make_unique<SensorDevice>("Hallo1", false);
+    ASSERT_EQ(device_sensor_ptr->getDeviceSensors().size(), 0);
+
+    std::unique_ptr<std::vector<std::string>> sensor_names_ptr = std::make_unique<std::vector<std::string>>();
+    
+    for (int i = 0; i < 1000; i++) {
+        sensor_names_ptr->push_back("Test" + std::to_string(i));
+    }
+    
+    ASSERT_EQ(sensor_names_ptr->size(), 1000);
+    
+    device_sensor_ptr->addSensors(*(sensor_names_ptr));
+    ASSERT_EQ(device_sensor_ptr->getDeviceSensors().size(), 1000);
+
+    sensor_names_ptr.reset(nullptr);
+
+    for (int i = 0; i < 1000; i++) {
+        ASSERT_EQ(device_sensor_ptr->getDeviceSensors()[i], "Test" + std::to_string(i));
+    }
+}

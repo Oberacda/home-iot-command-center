@@ -58,7 +58,7 @@ void SensorDevice::addSensor(const std::string& sensor_name) {
 }
 
 void SensorDevice::addSensors(const std::vector<std::string>& sensors) {
-    for (const std::string& sensor_name : sensors) {
+    for (auto sensor_name : sensors) {
         this->addSensor(sensor_name);
     }
 }
