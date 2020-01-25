@@ -27,7 +27,7 @@ if (DOXYGEN_FOUND AND home_iot_ctl_BUILD_DOC)
 
     # request to configure the file
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    message("Doxygen build started")
+    message(STATUS "Doxygen build started")
 
     # note the option ALL which allows to build the docs together with the application
     add_custom_target(home_iot_ctl_LIB_DOC
@@ -41,8 +41,10 @@ endif (DOXYGEN_FOUND AND home_iot_ctl_BUILD_DOC)
 
 set(home_iot_ctl_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+set(home_iot_ctl_LIB_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/resources)
+
 option(home_iot_ctl_LIB_TESTING_ENABLED "Enabled testing of the project!" ON)
-option(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED "Enabled test coverage of the project!" ON)
+option(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED "Enabled test coverage of the project!" OFF)
 if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND NOT home_iot_ctl_LIB_TESTING_ENABLED)
     message(ERROR "Coverage can only be enabled when testing is enabled!")
 endif(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND NOT home_iot_ctl_LIB_TESTING_ENABLED)

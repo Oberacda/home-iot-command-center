@@ -15,6 +15,8 @@
 #include <string>
 #include <vector>
 #include <ostream>
+#include <sstream>
+#include <iosfwd>
 #include <stdexcept>
 
 #include "home_iot_ctl_exports.hpp"
@@ -103,7 +105,7 @@ public:
      * @param device The device to represent.
      * @return A stream with the representation added. Can be used to chain calls.
      */
-    friend std::ostream &operator<<(std::ostream &os, const Device &device);
+    friend std::ostream HOME_IOT_CTL_API &operator<<(std::ostream &os, const Device &device);
 };
 
 /*!
@@ -156,6 +158,8 @@ public:
      * @param isAvailable Indicator if the device was available at the last indexing.
      */
     SensorDevice(const std::string &deviceName, bool isAvailable);
+
+    friend std::ostream HOME_IOT_CTL_API &operator<<(std::ostream &os, const SensorDevice &device);
 };
 
 

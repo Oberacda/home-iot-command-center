@@ -10,6 +10,7 @@
 #include "iot/device.hpp"
 
 #include <utility>
+#include <iostream>
 
 const std::string &Device::getDeviceName() const {
     return device_name;
@@ -34,7 +35,7 @@ bool Device::operator!=(const Device &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream &operator<<(std::ostream &os, const Device &device) {
+std::ostream HOME_IOT_CTL_API &operator<<(std::ostream &os, const Device &device) {
     os << " device_name: " << device.device_name << " is_available: " << device.is_available;
     return os;
 }
@@ -61,4 +62,9 @@ void SensorDevice::addSensors(const std::vector<std::string>& sensors) {
     for (auto sensor_name : sensors) {
         this->addSensor(sensor_name);
     }
+}
+
+std::ostream HOME_IOT_CTL_API &operator<<(std::ostream &os, const SensorDevice &device) {
+    os << static_cast<const Device &>(device);
+    return os;
 }

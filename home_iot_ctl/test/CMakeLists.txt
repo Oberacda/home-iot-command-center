@@ -11,11 +11,8 @@ add_executable(home_iot_ctl_LIB_TEST
         )
 
 target_link_libraries(home_iot_ctl_LIB_TEST
-        PUBLIC
-        home_iot_ctl_LIB
-        gcov
-        PRIVATE
-        GTest::GTest
+        PUBLIC home_iot_ctl_LIB
+        PRIVATE GTest::GTest
         )
 
 if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND CMAKE_COMPILER_IS_GNUCXX)

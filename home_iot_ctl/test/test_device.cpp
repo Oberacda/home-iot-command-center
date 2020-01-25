@@ -5,6 +5,7 @@
 #include <memory>
 #include <algorithm>
 #include <vector>
+#include <ostream>
 
 #include <gtest/gtest.h>
 #include <iot/device.hpp>

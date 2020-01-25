@@ -1,25 +1,27 @@
-set(home_iot_ctl_EXE_PUBLIC_INCLUDE_FILES
+set(home_iot_ctl_LIB_PUBLIC_INCLUDE_FILES
         ${CMAKE_CURRENT_BINARY_DIR}/home_iot_ctl_exports.hpp
         ${home_iot_ctl_INCLUDE_DIR}/iot/device.hpp
         ${home_iot_ctl_INCLUDE_DIR}/iot/home.hpp
         )
-set(home_iot_ctl_EXE_PRIVATE_INCLUDE_FILES
+set(home_iot_ctl_LIB_PRIVATE_INCLUDE_FILES
 
         )
 
-set(home_iot_ctl_EXE_INCLUDE_FILES
-        ${home_iot_ctl_EXE_PUBLIC_INCLUDE_FILES}
-        ${home_iot_ctl_EXE_PRIVATE_INCLUDE_FILES}
+set(home_iot_ctl_LIB_INCLUDE_FILES
+        ${home_iot_ctl_LIB_PUBLIC_INCLUDE_FILES}
+        ${home_iot_ctl_LIB_PRIVATE_INCLUDE_FILES}
         )
 
-set(home_iot_ctl_EXE_SOURCE_FILES
+set(home_iot_ctl_LIB_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/home.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/device.cpp
         )
 
+
 add_library(home_iot_ctl_LIB SHARED
-        ${home_iot_ctl_EXE_SOURCE_FILES}
-        ${home_iot_ctl_EXE_INCLUDE_FILES}
+        ${home_iot_ctl_LIB_SOURCE_FILES}
+        ${home_iot_ctl_LIB_INCLUDE_FILES}
+        ${home_iot_ctl_LIB_RESOURCE_FILES}
         )
 
 generate_export_header(home_iot_ctl_LIB

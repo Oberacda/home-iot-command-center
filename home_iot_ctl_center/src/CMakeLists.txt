@@ -1,12 +1,16 @@
 
 set(home_iot_ctl_center_EXE_INCLUDE_FILES
+        ${home_iot_ctl_center_EXE_INCLUDE_DIR}/homeiotctlcenter.hpp
         ${home_iot_ctl_center_EXE_INCLUDE_DIR}/main.hpp
-        ${home_iot_ctl_center_EXE_INCLUDE_DIR}/mymodel.hpp
         )
 
 set(home_iot_ctl_center_EXE_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/mymodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/homeiotctlcenter.cpp
+        )
+
+set(home_iot_ctl_center_EXE_RESOURCE_FILES
+        #${CMAKE_CURRENT_SOURCE_DIR}/homeiotctlcenter.ui
         )
 
 if (WIN32)
@@ -18,12 +22,14 @@ if (WIN32)
     include(generate_product_version)
     generate_product_version(
             home_iot_ctl_center_EXE_VersionFilesOutputVariable
-            NAME                ${PROJECT_NAME}
+            NAME                "HomeIotCtlCenter"
+            BUNDLE              "HomeIotCtlCenter"
             ICON                ${home_iot_ctl_center_EXE_RESOURCE_DIR}/appicon.ico
-            VERSION_MAJOR       ${CMAKE_PROJECT_VERSION_MAJOR}
-            VERSION_MINOR       ${CMAKE_PROJECT_VERSION_MINOR}
-            VERSION_PATCH       ${CMAKE_PROJECT_VERSION_PATCH}
-            VERSION_REVISION    ${CMAKE_PROJECT_VERSION_TWEAK}
+            VERSION_MAJOR       ${PROJECT_VERSION_MAJOR}
+            VERSION_MINOR       ${PROJECT_VERSION_MINOR}
+            VERSION_PATCH       ${PROJECT_VERSION_PATCH}
+            VERSION_REVISION    ${PROJECT_VERSION_TWEAK}
+            COMPANY_NAME        "David Oberacker"
     )
     set(home_iot_ctl_center_EXE_RESOURCE_FILES
             ${home_iot_ctl_center_EXE_RESOURCE_FILES}
