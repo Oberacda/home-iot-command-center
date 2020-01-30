@@ -15,36 +15,44 @@ target_link_libraries(home_iot_ctl_LIB_TEST
         PRIVATE GTest::GTest
         )
 
-if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND CMAKE_COMPILER_IS_GNUCXX)
-        include(CodeCoverage)
-        
-        target_compile_options(home_iot_ctl_LIB_TEST
-                PUBLIC -fprofile-arcs
-                PUBLIC -ftest-coverage
-        )
+if (home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED)
+
+    include(CodeCoverage)
+
+    target_compile_options(home_iot_ctl_LIB_TEST
+            PUBLIC -fprofile-arcs
+            PUBLIC -ftest-coverage
+            )
+    target_link_options(home_iot_ctl_LIB_TEST
+            PUBLIC --coverage
+            )
+
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+
 
         target_link_libraries(home_iot_ctl_LIB_TEST
                 PUBLIC gcov
-        )
-
-        target_link_options(home_iot_ctl_LIB_TEST
-                PUBLIC --coverage
-        )
-
-        set(COVERAGE_EXCLUDES 
-                "/usr/**/*" 
-                "${CMAKE_CURRENT_SOURCE_DIR}/*"
-        )
-
-        setup_target_for_coverage_lcov(
-                NAME home_iot_ctl_LIB_TEST_COVERAGE
-                EXECUTABLE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test/HomeIotCtlTest"
-                DEPENDENCIES home_iot_ctl_LIB_TEST
-                BASE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-                EXCLUDE "'/usr/**/*'"
                 )
 
-endif(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND CMAKE_COMPILER_IS_GNUCXX)
+
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+    endif()
+
+    set(COVERAGE_EXCLUDES
+            "/usr/**/*"
+            "${CMAKE_CURRENT_SOURCE_DIR}/*"
+            )
+
+    setup_target_for_coverage_lcov(
+            NAME home_iot_ctl_LIB_TEST_COVERAGE
+            EXECUTABLE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test/HomeIotCtlTest"
+            DEPENDENCIES home_iot_ctl_LIB_TEST
+            BASE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
+            EXCLUDE "'/usr/**/*'"
+    )
+
+endif(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED)
 
 set_target_properties(home_iot_ctl_LIB_TEST
         PROPERTIES

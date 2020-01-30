@@ -51,24 +51,33 @@ set_target_properties(home_iot_ctl_LIB
         PROPERTIES
         OUTPUT_NAME     "HomeIotCtl"
         LANGUAGES       CXX
-        CXX_STANDARD    14
+        CXX_STANDARD    17
         VERSION         "${home_iot_ctl_LIB_VERSION}"
         PRIVATE_HEADER  "${home_iot_ctl_EXE_PRIVATE_INCLUDE_FILES}"
         PUBLIC_HEADER   "${home_iot_ctl_EXE_PUBLIC_INCLUDE_FILES}"
         )
 
+if (home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED)
 
-if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND CMAKE_COMPILER_IS_GNUCXX)
         target_compile_options(home_iot_ctl_LIB
                 PUBLIC -fprofile-arcs
                 PUBLIC -ftest-coverage
-        )
-
-        target_link_libraries(home_iot_ctl_LIB
-                PUBLIC gcov
-        )
+                )
 
         target_link_options(home_iot_ctl_LIB
                 PUBLIC --coverage
-        )
-endif()
+                )
+
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+
+
+                target_link_libraries(home_iot_ctl_LIB
+                        PUBLIC gcov
+                )
+
+
+        elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+
+        endif()
+
+endif(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED)

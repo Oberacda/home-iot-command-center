@@ -12,45 +12,48 @@
 #include <utility>
 #include <iostream>
 
-const std::string &Device::getDeviceName() const {
+const std::string &D4ve::Iot::Devices::Device::getDeviceName() const {
     return device_name;
 }
 
-bool Device::isAvailable() const {
+bool D4ve::Iot::Devices::Device::isAvailable() const {
     return is_available;
 }
 
-Device::Device(std::string deviceName, bool isAvailable) : device_name(std::move(deviceName)),
+D4ve::Iot::Devices::Device::Device(std::string deviceName, bool isAvailable) : device_name(std::move(deviceName)),
                                    is_available(isAvailable) {}
 
-Device::~Device() {
+D4ve::Iot::Devices::Device::~Device() {
 
 }
 
-bool Device::operator==(const Device &rhs) const {
+bool D4ve::Iot::Devices::Device::operator==(const D4ve::Iot::Devices::Device &rhs) const {
     return device_name == rhs.device_name;
 }
 
-bool Device::operator!=(const Device &rhs) const {
+bool D4ve::Iot::Devices::Device::operator!=(const D4ve::Iot::Devices::Device &rhs) const {
     return !(rhs == *this);
 }
 
-std::ostream HOME_IOT_CTL_API &operator<<(std::ostream &os, const Device &device) {
-    os << " device_name: " << device.device_name << " is_available: " << device.is_available;
-    return os;
-}
 
-void Device::setIsAvailable(bool isAvailable) {
+
+void D4ve::Iot::Devices::Device::setIsAvailable(bool isAvailable) {
     is_available = isAvailable;
 }
 
-const std::vector<std::string> &SensorDevice::getDeviceSensors() const {
+std::ostream HOME_IOT_CTL_API &
+D4ve::Iot::Devices::operator<<(std::ostream &os, const D4ve::Iot::Devices::Device &device) {
+        os << "[ device_name: " << device.getDeviceName() << " is_available: " << device.isAvailable() << " ]";
+        return os;
+}
+
+const std::vector<std::string> &D4ve::Iot::Devices::SensorDevice::getDeviceSensors() const {
     return device_sensors;
 }
 
-SensorDevice::SensorDevice(const std::string &deviceName, bool isAvailable) : Device(deviceName, isAvailable) {}
+D4ve::Iot::Devices::SensorDevice::SensorDevice(const std::string &deviceName, bool isAvailable) : Device(deviceName, isAvailable) {}
 
-void SensorDevice::addSensor(const std::string& sensor_name) {
+void D4ve::Iot::Devices::SensorDevice::addSensor(const std::string& sensor_name) {
     if (sensor_name.length() < 1) {
         throw std::invalid_argument("The given sensor_name is too short!");
     }
@@ -58,13 +61,14 @@ void SensorDevice::addSensor(const std::string& sensor_name) {
     this->device_sensors.push_back(sensor_name);
 }
 
-void SensorDevice::addSensors(const std::vector<std::string>& sensors) {
+void D4ve::Iot::Devices::SensorDevice::addSensors(const std::vector<std::string>& sensors) {
     for (auto sensor_name : sensors) {
         this->addSensor(sensor_name);
     }
 }
 
-std::ostream HOME_IOT_CTL_API &operator<<(std::ostream &os, const SensorDevice &device) {
-    os << static_cast<const Device &>(device);
+std::ostream HOME_IOT_CTL_API &
+D4ve::Iot::Devices::operator<<(std::ostream &os, const D4ve::Iot::Devices::SensorDevice &device) {
+    os << "[ " << static_cast<const D4ve::Iot::Devices::Device &>(device) << " sensors: " << device.getDeviceSensors().size() << " ]";
     return os;
 }

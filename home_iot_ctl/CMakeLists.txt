@@ -13,6 +13,7 @@ project(home_iot_ctl
 
 find_package(Threads REQUIRED)
 find_package(PahoMqttCpp REQUIRED)
+find_package(RapidJSON REQUIRED)
 
 find_package(GTest)
 
@@ -39,12 +40,18 @@ else (DOXYGEN_FOUND AND home_iot_ctl_BUILD_DOC)
     message("Doxygen need to be installed to generate the doxygen documentation")
 endif (DOXYGEN_FOUND AND home_iot_ctl_BUILD_DOC)
 
+include_directories(${RapidJSON_INCLUDE_DIR})
+
 set(home_iot_ctl_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(home_iot_ctl_LIB_RESOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
 option(home_iot_ctl_LIB_TESTING_ENABLED "Enabled testing of the project!" ON)
-option(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED "Enabled test coverage of the project!" OFF)
+
+if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+    option(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED "Enabled test coverage of the project!" OFF)
+endif(CMAKE_BUILD_TYPE MATCHES DEBUG)
+
 if(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND NOT home_iot_ctl_LIB_TESTING_ENABLED)
     message(ERROR "Coverage can only be enabled when testing is enabled!")
 endif(home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED AND NOT home_iot_ctl_LIB_TESTING_ENABLED)
