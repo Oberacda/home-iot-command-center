@@ -24,6 +24,22 @@
 
 namespace D4ve::Iot::Devices {
 
+
+    /*!
+     * @brief Status of a device in the IoT network.
+     *
+     * @details This enum encodes the status of a device. The device has to answer at least once in order to get a status.
+     */
+    enum class DeviceStatus {
+        UNKNOWN, ///< Device status is unknown.
+        DISCONNECTED, ///< Device is known but does not respond any more.
+        IDLE, ///< The device is available but not doing any job.
+        RUNNING, ///< The device is available and is running its job.
+        ERROR ///< The device is in a error state.
+    };
+
+    std::ostream HOME_IOT_CTL_API &operator<<(std::ostream& os, DeviceStatus status);
+
     /*!
      * @brief Class modeling a single IoT device in the network.
      *
@@ -41,11 +57,10 @@ namespace D4ve::Iot::Devices {
         std::string device_name;
 
         /*!
-         * @brief Boolean marking if the sensor as recorded as available.
-         * @details If this is set to false, the sensor was present in the network at one time but was not when the last
-         * index update was performed.
+         * @brief The status of the device.
          */
-        bool is_available;
+        DeviceStatus status;
+
 
     public:
         virtual ~Device();
@@ -70,9 +85,9 @@ namespace D4ve::Iot::Devices {
          * @details This creates a new device registered from the network.
          *
          * @param deviceName The mqtt network global device name.
-         * @param isAvailable Indicator if the device was available at the last indexing.
+         * @param status Status of the device.
          */
-        Device(std::string deviceName, bool isAvailable);
+        Device(std::string deviceName, DeviceStatus status);
 
         /*!
          * @brief Getter for the unique MQTT Client name of the device.
@@ -84,19 +99,18 @@ namespace D4ve::Iot::Devices {
         [[nodiscard]] const std::string &getDeviceName() const;
 
         /*!
-         * @brief Getter for the isAvaliable attribute.
-         * @details  If this returns false, the sensor was present in the network at one time but was not when the last
-         * index update was performed.
-         * @return true iff the sensor was present at the last indexing, false iff he was not present.
+         * @brief Gets the current status of the device.
+         *
+         * @return Current known status of the device.
          */
-        [[nodiscard]] bool isAvailable() const;
+        [[nodiscard]] DeviceStatus getStatus() const;
 
         /*!
-         * @brief Sets the availability to a new value.
+         * @brief Sets a new status for the device.
          *
-         * @param isAvailable The new value for the availability.
+         * @param status The new status to be set.
          */
-        void setIsAvailable(bool isAvailable);
+        void setStatus(DeviceStatus status);
 
         /*!
          * @brief Prints a common representation of the device as a stream.
@@ -156,7 +170,7 @@ namespace D4ve::Iot::Devices {
          * @param deviceName The mqtt network global device name.
          * @param isAvailable Indicator if the device was available at the last indexing.
          */
-        SensorDevice(const std::string &deviceName, bool isAvailable);
+        SensorDevice(const std::string &deviceName, DeviceStatus status);
 
         /*!
          * @brief Prints a common representation of the device as a stream.
@@ -164,8 +178,10 @@ namespace D4ve::Iot::Devices {
          * @param device The device to represent.
          * @return A stream with the representation added. Can be used to chain calls.
          */
-        friend std::ostream HOME_IOT_CTL_API &operator<<(std::ostream &os, const D4ve::Iot::Devices::SensorDevice &device);
+        friend std::ostream HOME_IOT_CTL_API &
+        operator<<(std::ostream &os, const D4ve::Iot::Devices::SensorDevice &device);
     };
+
 };
 
 #endif //HOME_IOT_CTL_IOT_DEVICE_HPP

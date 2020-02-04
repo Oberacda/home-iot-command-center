@@ -40,7 +40,7 @@ else (DOXYGEN_FOUND AND home_iot_ctl_BUILD_DOC)
     message("Doxygen need to be installed to generate the doxygen documentation")
 endif (DOXYGEN_FOUND AND home_iot_ctl_BUILD_DOC)
 
-include_directories(${RapidJSON_INCLUDE_DIR})
+include_directories(${RAPIDJSON_INCLUDE_DIRS})
 
 set(home_iot_ctl_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

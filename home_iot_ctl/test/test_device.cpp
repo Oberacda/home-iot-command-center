@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-err58-cpp"
 //
 // Created by David Oberacker on 2019-08-02.
 //
@@ -17,11 +19,9 @@ public:
     std::unique_ptr<D4ve::Iot::Devices::Device> device_hallo_false_ptr;
     std::unique_ptr<D4ve::Iot::Devices::Device> device_hallo_true_ptr;
 
-    DeviceTest() {
-    }
+    DeviceTest() = default;
 
-    ~DeviceTest() override {
-    }
+    ~DeviceTest() override = default;
 
     // If the constructor and destructor are not enough for setting up
     // and cleaning up each test, you can define the following methods:
@@ -29,8 +29,8 @@ public:
     void SetUp() override {
         // Code here will be called immediately after the constructor (right
         // before each test).
-        this->device_hallo_false_ptr = std::make_unique<D4ve::Iot::Devices::Device>("Hallo", false);
-        this->device_hallo_true_ptr = std::make_unique<D4ve::Iot::Devices::Device>("Hallo", true);
+        this->device_hallo_false_ptr = std::make_unique<D4ve::Iot::Devices::Device>("Hallo", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
+        this->device_hallo_true_ptr = std::make_unique<D4ve::Iot::Devices::Device>("Hallo", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
     }
 
     void TearDown() override {
@@ -43,10 +43,10 @@ public:
 
 TEST_F(DeviceTest, ConstructorValid) {
     EXPECT_EQ(this->device_hallo_false_ptr->getDeviceName(), "Hallo");
-    EXPECT_EQ(this->device_hallo_false_ptr->isAvailable(), false);
+    EXPECT_EQ(this->device_hallo_false_ptr->getStatus(), D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 
     EXPECT_EQ(this->device_hallo_true_ptr->getDeviceName(), "Hallo");
-    EXPECT_EQ(this->device_hallo_true_ptr->isAvailable(), true);
+    EXPECT_EQ(this->device_hallo_true_ptr->getStatus(), D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 }
 
 
@@ -59,7 +59,7 @@ TEST_F(DeviceTest, EqualityName) {
     EXPECT_TRUE(*(this->device_hallo_true_ptr) == *(this->device_hallo_true_ptr));
 
     std::unique_ptr<D4ve::Iot::Devices::Device> device_hello1_ptr = std::make_unique<D4ve::Iot::Devices::Device>(
-            "Hallo1", false);
+            "Hallo1", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 
     EXPECT_FALSE(*(this->device_hallo_false_ptr) == *(device_hello1_ptr));
     EXPECT_FALSE(*(this->device_hallo_true_ptr) == *(device_hello1_ptr));
@@ -69,10 +69,10 @@ TEST_F(DeviceTest, EqualityName) {
 TEST_F(DeviceTest, ToString) {
     std::stringstream stringstream;
     std::unique_ptr<D4ve::Iot::Devices::Device> device_hello1_ptr = std::make_unique<D4ve::Iot::Devices::Device>(
-            "Hallo1", false);
+            "Hallo1", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
     stringstream << *device_hello1_ptr;
 
-    EXPECT_EQ(stringstream.str(), "[ device_name: Hallo1 is_available: 0 ]");
+    EXPECT_EQ(stringstream.str(), "[ device_name: Hallo1 status: UNKNOWN ]");
 }
 
 
@@ -85,7 +85,7 @@ TEST_F(DeviceTest, UnequalityName) {
     EXPECT_FALSE(*(this->device_hallo_true_ptr) != *(this->device_hallo_true_ptr));
 
     std::unique_ptr<D4ve::Iot::Devices::Device> device_hello1_ptr = std::make_unique<D4ve::Iot::Devices::Device>(
-            "Hallo1", false);
+            "Hallo1", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 
     EXPECT_TRUE(*(this->device_hallo_false_ptr) != *(device_hello1_ptr));
     EXPECT_TRUE(*(this->device_hallo_true_ptr) != *(device_hello1_ptr));
@@ -93,12 +93,12 @@ TEST_F(DeviceTest, UnequalityName) {
 }
 
 
-TEST_F(DeviceTest, SetAvailability) {
+TEST_F(DeviceTest, SetStatus) {
     std::unique_ptr<D4ve::Iot::Devices::Device> device_sensor_ptr = std::make_unique<D4ve::Iot::Devices::Device>(
-            "Hallo1", false);
-    EXPECT_FALSE(device_sensor_ptr->isAvailable());
-    device_sensor_ptr->setIsAvailable(true);
-    EXPECT_TRUE(device_sensor_ptr->isAvailable());
+            "Hallo1", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
+    EXPECT_EQ(device_sensor_ptr->getStatus(), D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
+    device_sensor_ptr->setStatus(D4ve::Iot::Devices::DeviceStatus::DISCONNECTED);
+    EXPECT_EQ(device_sensor_ptr->getStatus(), D4ve::Iot::Devices::DeviceStatus::DISCONNECTED);
 }
 
 
@@ -108,11 +108,9 @@ public:
     std::unique_ptr<D4ve::Iot::Devices::SensorDevice> test_sensor_device_1_ptr;
     std::unique_ptr<D4ve::Iot::Devices::SensorDevice> test_sensor_device_2_ptr;
 
-    SensorDeviceTest() {
-    }
+    SensorDeviceTest() = default;
 
-    ~SensorDeviceTest() override {
-    }
+    ~SensorDeviceTest() override = default;
 
     // If the constructor and destructor are not enough for setting up
     // and cleaning up each test, you can define the following methods:
@@ -120,8 +118,8 @@ public:
     void SetUp() override {
         // Code here will be called immediately after the constructor (right
         // before each test).
-        this->test_sensor_device_1_ptr = std::make_unique<D4ve::Iot::Devices::SensorDevice>("Hallo1", false);
-        this->test_sensor_device_2_ptr = std::make_unique<D4ve::Iot::Devices::SensorDevice>("Hallo2", true);
+        this->test_sensor_device_1_ptr = std::make_unique<D4ve::Iot::Devices::SensorDevice>("Hallo1", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
+        this->test_sensor_device_2_ptr = std::make_unique<D4ve::Iot::Devices::SensorDevice>("Hallo2", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
     }
 
     void TearDown() override {
@@ -134,10 +132,10 @@ public:
 
 TEST_F(SensorDeviceTest, ConstructorValid) {
     EXPECT_EQ(this->test_sensor_device_1_ptr->getDeviceName(), "Hallo1");
-    EXPECT_EQ(this->test_sensor_device_1_ptr->isAvailable(), false);
+    EXPECT_EQ(this->test_sensor_device_1_ptr->getStatus(), D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 
     EXPECT_EQ(this->test_sensor_device_2_ptr->getDeviceName(), "Hallo2");
-    EXPECT_EQ(this->test_sensor_device_2_ptr->isAvailable(), true);
+    EXPECT_EQ(this->test_sensor_device_2_ptr->getStatus(), D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 }
 
 TEST_F(SensorDeviceTest, NameInvalid) {
@@ -147,7 +145,7 @@ TEST_F(SensorDeviceTest, NameInvalid) {
 
 TEST_F(SensorDeviceTest, Unequality) {
     std::unique_ptr<D4ve::Iot::Devices::SensorDevice> device_hello1_ptr = std::make_unique<D4ve::Iot::Devices::SensorDevice>(
-            "Hallo3", false);
+            "Hallo3", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 
     EXPECT_TRUE(*(this->test_sensor_device_1_ptr) != *(device_hello1_ptr));
     EXPECT_TRUE(*(this->test_sensor_device_2_ptr) != *(device_hello1_ptr));
@@ -156,7 +154,7 @@ TEST_F(SensorDeviceTest, Unequality) {
 
 TEST_F(DeviceTest, AddSensor) {
     std::unique_ptr<D4ve::Iot::Devices::SensorDevice> device_sensor_ptr = std::make_unique<D4ve::Iot::Devices::SensorDevice>(
-            "Hallo1", false);
+            "Hallo1", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
     device_sensor_ptr->addSensor("Test1");
     EXPECT_EQ(device_sensor_ptr->getDeviceSensors().size(), 1);
     EXPECT_TRUE(std::find(device_sensor_ptr->getDeviceSensors().begin(),
@@ -204,14 +202,15 @@ TEST_F(SensorDeviceTest, ToString) {
 
     stringstream << *(this->test_sensor_device_1_ptr);
 
-    EXPECT_EQ(stringstream.str(), "[ [ device_name: Hallo1 is_available: 0 ] sensors: 0 ]");
+    EXPECT_EQ(stringstream.str(), "[ [ device_name: Hallo1 status: UNKNOWN ] sensors: 0 ]");
 }
 
 TEST_F(SensorDeviceTest, Equality) {
     std::unique_ptr<D4ve::Iot::Devices::SensorDevice> device_hello1_ptr = std::make_unique<D4ve::Iot::Devices::SensorDevice>(
-            "Hallo3", false);
+            "Hallo3", D4ve::Iot::Devices::DeviceStatus::UNKNOWN);
 
     EXPECT_FALSE(*(this->test_sensor_device_1_ptr) == *(device_hello1_ptr));
     EXPECT_FALSE(*(this->test_sensor_device_2_ptr) == *(device_hello1_ptr));
     EXPECT_TRUE(*(device_hello1_ptr) == *(device_hello1_ptr));
 }
+#pragma clang diagnostic pop

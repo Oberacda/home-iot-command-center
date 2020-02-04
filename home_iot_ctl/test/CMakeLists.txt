@@ -13,7 +13,23 @@ add_executable(home_iot_ctl_LIB_TEST
 target_link_libraries(home_iot_ctl_LIB_TEST
         PUBLIC home_iot_ctl_LIB
         PRIVATE GTest::GTest
+        PRIVATE GTest::Main
         )
+if(WIN32)
+    add_custom_command(TARGET home_iot_ctl_LIB_TEST POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:home_iot_ctl_LIB>
+            $<TARGET_FILE_DIR:home_iot_ctl_LIB_TEST>)
+
+#[[    add_custom_command(TARGET home_iot_ctl_LIB_TEST POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            $<TARGET_PROPERTY:GTest::GTest,IMPORTED_LOCATION_DEBUG>
+            $<TARGET_FILE_DIR:home_iot_ctl_LIB_TEST>)
+    add_custom_command(TARGET home_iot_ctl_LIB_TEST POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            $<TARGET_FILE:GTest::Main>
+            $<TARGET_FILE_DIR:home_iot_ctl_LIB_TEST>)]]
+endif(WIN32)
 
 if (home_iot_ctl_LIB_TESTING_COVERAGE_ENABLED)
 

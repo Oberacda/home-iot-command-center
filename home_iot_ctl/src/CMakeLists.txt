@@ -14,6 +14,7 @@ set(home_iot_ctl_LIB_INCLUDE_FILES
 
 set(home_iot_ctl_LIB_SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/home.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/mqtt_home.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/device.cpp
         )
 
@@ -41,6 +42,7 @@ target_include_directories(home_iot_ctl_LIB
 target_compile_options(home_iot_ctl_LIB
         PRIVATE -DHOME_IOT_CTL__LIB_EXPORTS=1
         PUBLIC  -fPIC
+        PUBLIC  ${RAPIDJSON_CXX_FLAGS}
         )
 
 target_link_libraries(home_iot_ctl_LIB

@@ -1,9 +1,15 @@
-//
-// Created by David Oberacker on 20.01.20.
-//
+/*!
+ * @file home.hpp
+ * @brief Header declaring classes related to the home mangement of the IoT network.
+ *
+ * @author David Oberacker <david.oberacker(at)gmail.com>
+ * @version 1.0.0
+ * @date 20.01.20
+ */
 
-#ifndef HOME_IOT_COMMAND_CENTER_HOME_HPP
-#define HOME_IOT_COMMAND_CENTER_HOME_HPP
+
+#ifndef HOME_IOT_CTL_IOT_HOME_HPP
+#define HOME_IOT_CTL_IOT_HOME_HPP
 
 #pragma once
 
@@ -19,6 +25,14 @@
 
 namespace D4ve::Iot::Home {
 
+    /*!
+     * @brief Class representing the callbacks used for the Home IoT network client.
+     *
+     * @details Callback functions for specific network events can be added to this class.
+     *
+     * @author David Oberacker <david.oberacker(at)gmail.com>
+     * @version 1.0.0
+     */
     class HOME_IOT_CTL_API HomeSubscriber {
     private:
         std::function<void(D4ve::Iot::Devices::SensorDevice)> on_announce_callback;
@@ -47,68 +61,62 @@ namespace D4ve::Iot::Home {
     };
 
     /*!
-     * @brief Class to represent the callbacks used on async mqtt operations!
+     * @brief Class representing a client for the home IoT network.
+     *
+     * @details The client function allows to send commands and register callbacks to and from the network.
+     *
+     * @author David Oberacker <david.oberacker(at)gmail.com>
+     * @version 1.0.0
      */
-    class HOME_IOT_CTL_API_NO_EXPORT HomeMqttCallbacks : public virtual mqtt::callback,
-                                                         public virtual mqtt::iaction_listener {
-    private:
-        /*!
-         * @brief Vector of clients that are subscribed to the callbacks defined in this method.
-         * @details These subscribers define callbacks that move incoming messages up to the required higher functions.
-         */
-        std::vector<HomeSubscriber> subscribers;
-
-        /*!
-         * @brief MQTT connection retry counter!
-         */
-        int nretry_;
-
-        /*!
-         * @brief MQTT client used for reconnecting the client!
-         */
-        mqtt::async_client &cli_;
-
-        /*!
-         * @brief MQTT connection options for reconnecting!
-         */
-        mqtt::connect_options &connOpts_;
-
+    class HOME_IOT_CTL_API HomeIotClient {
     public:
+        /*!
+         * @brief Adds a subscriber to home network events.
+         * @param subscriber The subscriber to add to the HomeIoTClient.
+         */
+        virtual void addSubscriber(const HomeSubscriber& subscriber) = 0;
 
-        void register_subscriber(const HomeSubscriber &subscriber);
+        /*!
+         * @brief Check if the Client is connected to the network.
+         * @return true iff the client is connected otherwise false.
+         */
+        virtual bool isConnected() = 0;
 
-        void connected(const mqtt::string &string) override;
+        /*!
+         * @brief Starts to connect the client.
+         * Iff successful a callback will be called.
+         */
+        virtual void connectClient() = 0;
 
-        void connection_lost(const mqtt::string &string) override;
+        /*!
+         * @brief Requests an announcement from all devices in the network.
+         */
+        virtual void requestAnnounce() = 0;
 
-        void message_arrived(mqtt::const_message_ptr ptr) override;
+        /*!
+         * @brief Gets the status of a single device that was previously announced.
+         *
+         * @details IF the status is returned a callback is returned.
+         *
+         * @param device The device to get the status from.
+         */
+        virtual void getDeviceStatus(Devices::Device device) = 0;
 
-        void on_failure(const mqtt::token &asyncActionToken) override;
-
-        void on_success(const mqtt::token &asyncActionToken) override;
-
-        HomeMqttCallbacks(
-                mqtt::async_client &cli,
-                mqtt::connect_options &connOpts,
-                std::vector<HomeSubscriber> subscribers)
-                : nretry_(0),
-                  cli_(cli),
-                  connOpts_(connOpts),
-                  subscribers(std::move(subscribers)) {};
-
-        HomeMqttCallbacks(
-                mqtt::async_client &cli,
-                mqtt::connect_options &connOpts) : nretry_(0),
-                                                   cli_(cli),
-                                                   connOpts_(connOpts),
-                                                   subscribers({}) {};
+        /*!
+         * @brief Sets the device status for a previously announced device.
+         * @details IF the status is changed a callback will be send.
+         * @param details The device to change the status of.
+         * @param deviceStatus The new status to set on the device.
+         */
+        virtual void setDeviceStatus(Devices::Device details, Devices::DeviceStatus deviceStatus) = 0;
     };
 
-    class HOME_IOT_CTL_API Home {
-    private:
-        std::unique_ptr<mqtt::async_client> mqtt_client;
-        HomeMqttCallbacks callbacks;
-    };
+    /*!
+     * Creates a new instance of a Mqtt based home IoT client.
+     *
+     * @return A newly created mqtt home iot client.
+     */
+    static std::unique_ptr<HomeIotClient> createMqttHomeIotClient();
 };
 
-#endif //HOME_IOT_COMMAND_CENTER_HOME_HPP
+#endif //HOME_IOT_CTL_IOT_HOME_HPP

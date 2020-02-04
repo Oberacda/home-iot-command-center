@@ -58,6 +58,12 @@ set_target_properties(home_iot_ctl_center_EXE
         AUTOUIC                     ON
         AUTORCC                     ON
         )
+if(WIN32)
+    add_custom_command(TARGET home_iot_ctl_center_EXE POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:home_iot_ctl_LIB>
+            $<TARGET_FILE_DIR:home_iot_ctl_center_EXE>)
+endif(WIN32)
 
 get_target_property(_qmake_executable Qt5::qmake IMPORTED_LOCATION)
 get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
