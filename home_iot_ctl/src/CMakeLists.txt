@@ -41,9 +41,14 @@ target_include_directories(home_iot_ctl_LIB
 
 target_compile_options(home_iot_ctl_LIB
         PRIVATE -DHOME_IOT_CTL__LIB_EXPORTS=1
-        PUBLIC  -fPIC
         PUBLIC  ${RAPIDJSON_CXX_FLAGS}
         )
+
+if ((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
+        target_compile_options(home_iot_ctl_LIB
+                PUBLIC  -fPIC
+                )
+endif((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
 
 target_link_libraries(home_iot_ctl_LIB
         PUBLIC PahoMqttCpp::paho-mqttpp3
